@@ -1,0 +1,31 @@
+@startuml
+actor User
+participant "This Repo" as A
+control "Image Builder\nCircleCI Project" as B
+control "Image Validation\nCircleCI Project" as D
+database "AMI Registry\nAWS" as C
+User -> A: Submits a PR\nwith image building changes.\nSpeculative policy
+activate A
+A <-> B: Packer builds the branch\ncreates a new AMI\ntagged with a datestamp
+activate B
+B -> B: Basic image tests:\nQuick inspec validation\nNothing too complex
+B -> C: Image candidate\nnot yet ready for prime time\npushed to registry
+activate C
+B -> A: Packer updates git\nbuild status, image-id\nannotated tag
+deactivate B
+A <-> User: Approving the PR\ntriggers merge to main branch.\nRepo now tracks built image
+activate B
+A -> B: push to main
+deactivate A
+B -> D: main-restricted job\nperforms some sanity checks\ntriggers other project
+activate D
+deactivate B
+D <-> C: Pulls new image candidate
+D -> D: Launches AMI,\nvalidates via Inspec\nor any suite of tests
+D -> C: Updates image tag\nReflecting vetted status.\nThis image now gold
+deactivate C
+activate A
+D -> A: Update main branch with pointer to vetted image tag and AMI-id
+deactivate D
+deactivate A
+@enduml

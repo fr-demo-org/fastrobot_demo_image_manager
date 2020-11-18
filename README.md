@@ -1,4 +1,4 @@
-## CircleCI driving Packer to validate and refresh custom AMIs
+## CircleCI driving Packer to validate and update custom AMIs
 
 You need a standard image to base things on. Maybe one with some configuration management
 installed and pre-converged to improve later machine creation-till-ready delays which can slow
@@ -29,28 +29,8 @@ We only need AWS creds for this. I've created a minimally permissioned unique se
 I'd like to make this a bit more GitOps single-source of truth by having two jobs acting on 
 this repo reflect both the desired state (the packer directives) and the dependency-resolved 
 
-```plantuml
-@startuml
-actor User
-participant "This Repo" as A
-participant "CircleCI Job" as B
-participant "AWS AMI Registry" as C
-participant "Image Validation Repo" as D
-User -> A: Submits a PR\nwith image building changes.\nSpeculative change
-activate A
-A -> B: Packer builds the branch\ncreates a new AMI\ntagged with a datestamp
-activate B
-B -> C: Tagged, preliminary AMI pushed
-activate C
-B -> A: Packer updates git\nbuild status and datestring as\nannotated tag
-A -> User: Approves the PR\ntriggers merge to main branch\nrepo now tracks built image
-A -> D: Notifies 
-D -> C: Notices a new image candidate
-destroy C
-deactivate B
-deactivate A
-@enduml
-```
+![PR Workflow Diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/fr-demo-org/fastrobot_demo_image_manager/main/pr_workflow.puml)
+
 
 
 #### tips
