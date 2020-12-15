@@ -28,5 +28,7 @@ workflows:
     jobs:
       - validate
       - build-base:
+          context:
+            - Terraform State
           requires:
             - validate

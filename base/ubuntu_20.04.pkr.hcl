@@ -144,7 +144,7 @@ build {
 
   #could not parse template for following block: "template: generated:3:43: executing \"generated\" at <.Vars>: can't evaluate field Vars in type struct { HTTPIP string; HTTPPort string }"
   provisioner "shell" {
-    environment_vars    = ["FS_TYPE=ext4", "DEVICE=/dev/xvdf", "CODENAME=focal"]
+    environment_vars    = ["FS_TYPE=${var.fs_type}", "DEVICE=${var.device}", "CODENAME=${var.codename}"]
     execute_command     = "sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     script              = "scripts/surrogate-bootstrap.sh"
     skip_clean          = true
