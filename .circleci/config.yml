@@ -32,3 +32,18 @@ workflows:
             - Terraform State
           requires:
             - validate
+  weekly-build:
+    jobs:
+      - validate
+      - build-base:
+          context:
+            - Terraform State
+          requires:
+            - validate
+    triggers:
+      - schedule:
+          cron: "0 14 * * 2" # Tuesday 6am Pacific
+          filters:
+            branches:
+              only:
+                - main
