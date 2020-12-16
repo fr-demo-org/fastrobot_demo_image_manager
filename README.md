@@ -30,8 +30,10 @@ I'd like to make this a bit more GitOps single-source of truth by having two job
 this repo reflect both the desired state (the packer directives) and the dependency-resolved, 
 post validation state (the AMI-id that was spun up and tested by an external project). 
 
+#### PR Driven workflow for on-demand image changes
 ![PR Workflow Diagram](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/fr-demo-org/fastrobot_demo_image_manager/main/pr_workflow.puml)
-
+#### Scheduled image rebuild
+![Scheduled image rebuild](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.github.com/fr-demo-org/fastrobot_demo_image_manager/main/scheduled_workflow.puml)
 
 
 #### tips

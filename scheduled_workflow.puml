@@ -1,0 +1,16 @@
+@startuml
+control CircleCI as CircleCI
+participant "This Repo" as A
+control "Image Builder\nCircleCI Project" as B
+database "AMI Registry\nAWS" as C
+CircleCI -> A: Schedules a build of\nthe main branch of this repo\neach tuesday morning
+activate A
+A <-> B: Packer builds main branch\ncreates a new AMI\ntagged with a datestamp
+activate B
+B -> B: Basic image tests:\nQuick inspec validation\nNothing too complex
+B -> C: Image candidate\nnot yet ready for prime time\npushed to registry
+activate C
+B -> A: Packer updates git\nbuild status, image-id\nannotated tag
+deactivate B
+A -> CircleCI: CircleCI is informed\nof a successful image\npush to registry
+@enduml
